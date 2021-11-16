@@ -1,11 +1,11 @@
-name: "MyLabJournal"
+name: "LANSIER"
 navbar:
-  title: "MyLabJournal"
+  title: "LANSIER"
   left:
-    - text: "Home"
+    - text: "Distribuidoras"
       href: index.html
-    - text: "Journal"
+    - text: "Paul Ventas"
       href: Journal.html
-    - text: "Links"
+    - text: "Gráficos"
       href: Links.html
 output_dir: "docs"
