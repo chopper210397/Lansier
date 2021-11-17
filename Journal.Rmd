@@ -13,6 +13,7 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(message=FALSE,warning=FALSE, cache=TRUE)
 library(lubridate)
+setwd("C:/Users/LBarrios/Desktop/testgithub/Lansier")
 ```
 Informes generados por el área de análisis comercial.
 
@@ -32,7 +33,7 @@ library(colorspace)
 library(RODBC)
 sqlcomercial<-odbcConnect("SQLuis",uid = "sa",pwd = "Comercial.2020")
 fecharcarga<-sqlQuery(sqlcomercial,"select * from Fechas_Carga")
-data<-read_xlsx("datapresentacion.xlsx") #borre todo el path que decia C/USERS,etc y lo deje solo en el nombre de el archivo, asi ya no importa donde lo corra siempre y cuando este en el wd
+data<-read_xlsx("C:/Users/LBarrios/Desktop/testgithub/Lansier/datapresentacion.xlsx") #borre todo el path que decia C/USERS,etc y lo deje solo en el nombre de el archivo, asi ya no importa donde lo corra siempre y cuando este en el wd
 #con los siguientes comandos se le da cierto formato a la tabla para que sea mas facil de presentar la data en una tabla
 tabla<-data %>% select(-3) %>% select(-1)
 for (i in 3:8) {
