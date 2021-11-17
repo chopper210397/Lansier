@@ -1,5 +1,5 @@
 ---
-title: "Journal"
+title: "REPORTE COMERCIAL"
 output:
   html_document:
     toc: true
@@ -12,6 +12,7 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(message=FALSE,warning=FALSE, cache=TRUE)
+library(lubridate)
 ```
 
 IMPORTANT: You can delete everything in here and start fresh. You might want to start by not deleting anything above this line until you know what that stuff is doing.
@@ -19,7 +20,10 @@ IMPORTANT: You can delete everything in here and start fresh. You might want to 
 
 This is an .Rmd file. It is plain text with special features. Any time you write just like this, it will be compiled to normal text in the website. If you put a \# in front of your text, it will create a top level-header.
 
-# My first post
+
+# Performance por categorización 
+
+
 ```{r FIG1 setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(kableExtra)
@@ -34,6 +38,7 @@ library(RODBC)
 sqlcomercial<-odbcConnect("SQLuis",uid = "sa",pwd = "Comercial.2020")
 fecharcarga<-sqlQuery(sqlcomercial,"select * from Fechas_Carga")
 data<-read_xlsx("datapresentacion.xlsx") #borre todo el path que decia C/USERS,etc y lo deje solo en el nombre de el archivo, asi ya no importa donde lo corra siempre y cuando este en el wd
+#con los siguientes comandos se le da cierto formato a la tabla para que sea mas facil de presentar la data en una tabla
 tabla<-data %>% select(-3) %>% select(-1)
 for (i in 3:8) {
   tabla[,i]<-tabla[,i]
@@ -53,15 +58,15 @@ for (i in 16:19) {
 # He borrado los *100(multiplicado por 100) en la linea 28 y linea 75 porque ahora mis valores no estan en decimales sino enteros, revisar eso
 ```
 
-```{r cars, echo=FALSE, fig.pos="H"}
+```{r , echo=FALSE, fig.pos="H"}
 
 tabla %>%
-  kbl(booktabs = TRUE,caption = paste0("Performance por categorización al ",today())) %>%
-  kable_styling(font_size = 8) %>% 
-  pack_rows(index = c("RR MM Lima Azul"=5,
-                      "RR MM Lima Rojo"=5,
-                      "RR MM Provincias"=5,
-                      "VENDEDORES Lima"=4)) %>% 
+  kbl(booktabs = TRUE, caption = paste0("Actualizado al ",today())) %>%
+  kable_styling(bootstrap_options = c("striped","bordered","hover","condensed","responsive")) %>% 
+  pack_rows("RR MM Lima Azul", 1, 5,color = "blue") %>%
+  pack_rows("RR MM Lima Rojo", 6, 10,color = "red") %>%
+  pack_rows("RR MM Provincias", 11, 15,color = "green") %>%
+  pack_rows("VENDEDORES Lima", 16, 19,color = "black") %>%
   row_spec(0,bold=T) %>% 
   footnote(number=c("Fecha de actualización fuentes:",
                     paste0("LANSIER: ",fecharcarga[1,2]),
@@ -71,18 +76,13 @@ tabla %>%
                     paste0("M&M: ",fecharcarga[5,2]),
                     paste0("DIMEXA: ",fecharcarga[6,2]),
                       "Los valores estan en porcentajes")) %>% 
-  kable_styling(latex_options = "HOLD_position") %>% 
  column_spec(3, color = "black",bold=T, background = ifelse(tabla$Total > 100, "green", ifelse(tabla$Total<80,"red","yellow")))
    
         
-              
-
  
 
 ```
 
-
-2018 | 7 | 23 Last compiled: `r Sys.Date()`
 
 Notice that whatever you define as a top level header, automatically gets put into the table of contents bar on the left. 
 

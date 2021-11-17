@@ -2,10 +2,10 @@ name: "LANSIER"
 navbar:
   title: "LANSIER"
   left:
-    - text: "Distribuidoras"
+    - text: "Inicio"
       href: index.html
-    - text: "Paul Ventas"
+    - text: "Distribuidoras"
       href: Journal.html
-    - text: "Gráficos"
+    - text: "Farmacias Peruanas"
       href: Links.html
 output_dir: "docs"
