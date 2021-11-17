@@ -11,7 +11,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(message=FALSE,warning=FALSE, cache=TRUE)
+knitr::opts_chunk$set(message=FALSE,warning=FALSE, cache=FALSE)
 library(lubridate)
 setwd("C:/Users/LBarrios/Desktop/testgithub/Lansier")
 ```
@@ -20,8 +20,9 @@ Informes generados por el área de análisis comercial.
 # Performance por categorización 
 
 
-```{r FIG1 setup, include=FALSE}
+```{r FIG1 setup, include=FALSE, cache=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
 library(kableExtra)
 library(tidyverse)
 library(tinytex)
@@ -55,7 +56,7 @@ for (i in 16:19) {
 # He borrado los *100(multiplicado por 100) en la linea 28 y linea 75 porque ahora mis valores no estan en decimales sino enteros, revisar eso
 ```
 
-```{r , echo=FALSE, fig.pos="H"}
+```{r , echo=FALSE, fig.pos="H",cache=FALSE}
 
 tabla %>%
   kbl(booktabs = TRUE, caption = paste0("Actualizado al ",today())) %>%
@@ -81,7 +82,7 @@ tabla %>%
 ```
 
 # Cumplimiento por zona
-```{r echo=FALSE,fig.pos="H"}
+```{r echo=FALSE, fig.pos="H", cache=FALSE}
 data %>%
   mutate(Total=Total) %>% 
   ggplot(aes(x=reorder(Nombre,Total),y=Total))+
@@ -96,5 +97,7 @@ data %>%
             )
 ```
 
-# Analisis competentencia
-Y asi se pueden ir agregando mas tablas graficos y conclusiones que se generan automatico y se cargan a esta web creada para Lansier, a la izquierda irian apareciendo los nuevos titulos que se asignen conforme se vayan creando, asi podrian hallar mas rapidamente lo que estan buscando, esto podria ser un reemplazo del pdf, me comentó que podia ser una opción para que los jefes no tengan que estar abriendo pdfs cada que les envio, asi que ahi esta la idea y tal vez se puede modificar algo o volver al pdf, lo bueno de esta web es que siempre esta online, solo se necesita el link, es similar a como funciona un dashboard de power bi, el unico esfuerzo es ejecutra el programa para que actualice la data jalando del sql y cree el reporte con todo actualizado al igual que hacemos en el power bi. 
+# Analisis competencia
+Y asi se pueden ir agregando mas tablas graficos y conclusiones que se generan automatico y se cargan a esta web creada para Lansier, a la izquierda irian apareciendo los nuevos titulos que se asignen conforme se vayan creando, asi podrian hallar mas rapidamente lo que estan buscando, esto podria ser un reemplazo del pdf, me comentó que podia ser una opción para que los jefes no tengan que estar abriendo pdfs cada que les envio, asi que ahi esta la idea y tal vez se puede modificar algo o volver al pdf, lo bueno de esta web es que siempre esta online, solo se necesita el link, es similar a como funciona un dashboard de power bi, el unico esfuerzo es ejecutra el programa para que actualice la data jalando del sql y cree el reporte con todo actualizado al igual que hacemos en el power bi.
+
+# Etc
