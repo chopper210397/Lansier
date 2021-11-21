@@ -17,8 +17,6 @@ setwd("C:/Users/LBarrios/Desktop/testgithub/Lansier")
 ```
 Informes generados por el área de análisis comercial.
 
-# Performance por categorización 
-
 
 ```{r FIG1 setup, include=FALSE, cache=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -54,28 +52,35 @@ for (i in 16:19) {
 }
 
 # He borrado los *100(multiplicado por 100) en la linea 28 y linea 75 porque ahora mis valores no estan en decimales sino enteros, revisar eso
-```
 
-## Porcentaje de cumplimiento
+
+```
+# Fechas de actualización
+```{r echo=FALSE , cache=FALSE}
+colnames(fecharcarga)<-c("Fuente","Fecha de Actualización")
+fecharcarga %>%
+  kbl(booktabs = TRUE,align = "c") %>% 
+  kable_styling(bootstrap_options = c("striped","hover","condensed","responsive","bordered"),
+                full_width = FALSE,
+                position = "left",
+                font_size = 12) %>% 
+  row_spec(0, bold = T, color = "white", background = "#2a4454")
+ 
+```
+# Performance por categorización
+### Porcentaje de cumplimiento
 ```{r , echo=FALSE, fig.pos="H",cache=FALSE}
 
 tabla %>%
-  kbl(booktabs = TRUE, caption = paste0("Actualizado al ",today())) %>%
+  kbl(booktabs = TRUE ) %>%
   kable_styling(bootstrap_options = c("striped","hover","condensed","responsive")) %>% 
   pack_rows("RR MM Lima Azul", 1, 5,color = "blue") %>%
   pack_rows("RR MM Lima Rojo", 6, 10,color = "red") %>%
   pack_rows("RR MM Provincias", 11, 15,color = "green") %>%
   pack_rows("VENDEDORES Lima", 16, 19) %>%
-  row_spec(0,bold=T) %>% 
-  footnote(number=c("Fecha de actualización fuentes:",
-                    paste0("LANSIER: ",fecharcarga[1,2]),
-                    paste("METRONIC: ",fecharcarga[2,2]) ,
-                    paste0("DIFARLIB: ",fecharcarga[3,2]),
-                    paste0("CASTILLO: ",fecharcarga[4,2]),
-                    paste0("M&M: ",fecharcarga[5,2]),
-                    paste0("DIMEXA: ",fecharcarga[6,2]),
-                      "Los valores estan en porcentajes")) %>% 
- column_spec(3, color = "black",bold=T, background = ifelse(tabla$Total > 100, "green", ifelse(tabla$Total<80,"red","yellow")))
+  row_spec(0,bold=T, color = "white", background = "#2a4454") %>% 
+  footnote(number=c("Los valores estan en porcentajes")) %>% 
+  column_spec(3, color = "black",bold=T, background = ifelse(tabla$Total > 100, "green", ifelse(tabla$Total<80,"red","yellow")))
    
         
  
@@ -90,8 +95,8 @@ dataventas<-read_xlsx("C:\\Users\\LBarrios\\Desktop\\SQLDATAEXTRACTOR\\mailrdata
 # AL PARECER PARA QUE ACTUALICE LA DATA TENGO QUE CAMBIAR ALGO DEL CODIGO SINO NO CORRE
 tablaventas<-dataventas %>% select(-3) %>% select(-1)
 for (i in 3:8) {
-  tablaventas[,i]<-tablaventas[,i]
-  
+  tablaventas[,i]<-round(tablaventas[,i],0)
+  tablaventas[,i]<-lapply(tablaventas[,i],format,big.mark=",")
 }
 for (i in 1:5) {
   tablaventas[i,1]<-substr(tablaventas[i,1],5,nchar(tablaventas[i,1])-4)
@@ -107,19 +112,20 @@ for (i in 16:19) {
 # He borrado los *100(multiplicado por 100) en la linea 28 y linea 75 porque ahora mis valores no estan en decimales sino enteros, revisar eso
 ```
 
-## Ventas en soles
+### Ventas en soles
 
 ```{r tablaventas , echo=FALSE, fig.pos="H",cache=FALSE}
 
 tablaventas %>%
-  kbl(booktabs = TRUE, caption = paste0("Actualizado al ",today())) %>%
+  kbl(booktabs = TRUE) %>%
   kable_styling(bootstrap_options = c("striped","hover","condensed","responsive")) %>% 
   pack_rows("RR MM Lima Azul", 1, 5,color = "blue") %>%
   pack_rows("RR MM Lima Rojo", 6, 10,color = "red") %>%
   pack_rows("RR MM Provincias", 11, 15,color = "green") %>%
   pack_rows("VENDEDORES Lima", 16, 19) %>%
-  row_spec(0,bold=T) %>%
-  column_spec(3, color = "black",bold=T, background = ifelse(tabla$Total > 100, "green", ifelse(tabla$Total<80,"red","yellow")))
+  row_spec(0,bold=T, color = "white", background = "#2a4454") %>%
+  column_spec(3, color = "black",bold=T, background = ifelse(tabla$Total > 100, "green", ifelse(tabla$Total<80,"red","yellow"))) %>% 
+  footnote(number = c("Los valores estan en soles"))
 ```
 
 
