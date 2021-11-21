@@ -56,11 +56,12 @@ for (i in 16:19) {
 # He borrado los *100(multiplicado por 100) en la linea 28 y linea 75 porque ahora mis valores no estan en decimales sino enteros, revisar eso
 ```
 
+## Porcentaje de cumplimiento
 ```{r , echo=FALSE, fig.pos="H",cache=FALSE}
 
 tabla %>%
   kbl(booktabs = TRUE, caption = paste0("Actualizado al ",today())) %>%
-  kable_styling(bootstrap_options = c("striped","bordered","hover","condensed","responsive")) %>% 
+  kable_styling(bootstrap_options = c("striped","hover","condensed","responsive")) %>% 
   pack_rows("RR MM Lima Azul", 1, 5,color = "blue") %>%
   pack_rows("RR MM Lima Rojo", 6, 10,color = "red") %>%
   pack_rows("RR MM Provincias", 11, 15,color = "green") %>%
@@ -106,13 +107,13 @@ for (i in 16:19) {
 # He borrado los *100(multiplicado por 100) en la linea 28 y linea 75 porque ahora mis valores no estan en decimales sino enteros, revisar eso
 ```
 
-
+## Ventas en soles
 
 ```{r tablaventas , echo=FALSE, fig.pos="H",cache=FALSE}
 
 tablaventas %>%
   kbl(booktabs = TRUE, caption = paste0("Actualizado al ",today())) %>%
-  kable_styling(bootstrap_options = c("striped","bordered","hover","condensed","responsive")) %>% 
+  kable_styling(bootstrap_options = c("striped","hover","condensed","responsive")) %>% 
   pack_rows("RR MM Lima Azul", 1, 5,color = "blue") %>%
   pack_rows("RR MM Lima Rojo", 6, 10,color = "red") %>%
   pack_rows("RR MM Provincias", 11, 15,color = "green") %>%
@@ -124,6 +125,7 @@ tablaventas %>%
 
 # Cumplimiento por zona
 ```{r echo=FALSE, fig.pos="H", cache=FALSE}
+#donde dice ifelse antes iba el valor fijo segun la semana, ya sea 20,40,70 o 100, ahora ya esta automatico en funcion a la fecha que se corre.
 data %>%
   mutate(Total=Total) %>% 
   ggplot(aes(x=reorder(Nombre,Total),y=Total))+
@@ -131,8 +133,11 @@ data %>%
   coord_flip()+labs(x="",y="%")+
           theme_minimal()+
   geom_text(aes(label=Total), hjust=-0.15, size=2.6)+
-  geom_hline(yintercept = 40,linetype="dotted",color="black")+
-  geom_text(aes(0,40,label = 40, vjust = 0),
+  geom_hline(yintercept =ifelse(day(today())>23,100,ifelse(day(today())>16,70,ifelse(day(today())>9,40,ifelse(day(today())>3,20,100)))) ,linetype="dotted",color="black")+
+  geom_text(aes(0,
+                ifelse(day(today())>23,100,ifelse(day(today())>16,70,ifelse(day(today())>9,40,ifelse(day(today())>3,20,100)))),
+                label = ifelse(day(today())>23,100,ifelse(day(today())>16,70,ifelse(day(today())>9,40,ifelse(day(today())>3,20,100)))),
+                vjust = 0),
             size=3,
             colour="black"
             )
