@@ -34,7 +34,7 @@ library(colorspace)
 library(RODBC)
 sqlcomercial<-odbcConnect("SQLuis",uid = "sa",pwd = "Comercial.2020")
 fecharcarga<-sqlQuery(sqlcomercial,"select * from Fechas_Carga")
-data<-read_xlsx("datapresentacion.xlsx") #borre todo el path que decia C/USERS,etc y lo deje solo en el nombre de el archivo, asi ya no importa donde lo corra siempre y cuando este en el wd
+data<-read_xlsx("C:\\Users\\LBarrios\\Desktop\\SQLDATAEXTRACTOR\\mailrdata\\datapresentacion.xlsx") #borre todo el path que decia C/USERS,etc y lo deje solo en el nombre de el archivo, asi ya no importa donde lo corra siempre y cuando este en el wd
 #con los siguientes comandos se le da cierto formato a la tabla para que sea mas facil de presentar la data en una tabla
 # AL PARECER PARA QUE ACTUALICE LA DATA TENGO QUE CAMBIAR ALGO DEL CODIGO SINO NO CORRE
 tabla<-data %>% select(-3) %>% select(-1)
@@ -80,6 +80,47 @@ tabla %>%
  
 
 ```
+
+
+
+```{r dataventas setup, include=FALSE, cache=FALSE}
+dataventas<-read_xlsx("C:\\Users\\LBarrios\\Desktop\\SQLDATAEXTRACTOR\\mailrdata\\datapresentacionventas.xlsx") #borre todo el path que decia C/USERS,etc y lo deje solo en el nombre de el archivo, asi ya no importa donde lo corra siempre y cuando este en el wd
+#con los siguientes comandos se le da cierto formato a la tabla para que sea mas facil de presentar la data en una tabla
+# AL PARECER PARA QUE ACTUALICE LA DATA TENGO QUE CAMBIAR ALGO DEL CODIGO SINO NO CORRE
+tablaventas<-dataventas %>% select(-3) %>% select(-1)
+for (i in 3:8) {
+  tablaventas[,i]<-tablaventas[,i]
+  
+}
+for (i in 1:5) {
+  tablaventas[i,1]<-substr(tablaventas[i,1],5,nchar(tablaventas[i,1])-4)
+}
+
+for (i in 6:10) {
+  tablaventas[i,1]<-substr(tablaventas[i,1],5,nchar(tablaventas[i,1])-4)
+}
+for (i in 16:19) {
+  tablaventas[i,1]<-substr(tablaventas[i,1],5,nchar(tablaventas[i,1]))
+}
+
+# He borrado los *100(multiplicado por 100) en la linea 28 y linea 75 porque ahora mis valores no estan en decimales sino enteros, revisar eso
+```
+
+
+
+```{r tablaventas , echo=FALSE, fig.pos="H",cache=FALSE}
+
+tablaventas %>%
+  kbl(booktabs = TRUE, caption = paste0("Actualizado al ",today())) %>%
+  kable_styling(bootstrap_options = c("striped","bordered","hover","condensed","responsive")) %>% 
+  pack_rows("RR MM Lima Azul", 1, 5,color = "blue") %>%
+  pack_rows("RR MM Lima Rojo", 6, 10,color = "red") %>%
+  pack_rows("RR MM Provincias", 11, 15,color = "green") %>%
+  pack_rows("VENDEDORES Lima", 16, 19) %>%
+  row_spec(0,bold=T) %>%
+  column_spec(3, color = "black",bold=T, background = ifelse(tabla$Total > 100, "green", ifelse(tabla$Total<80,"red","yellow")))
+```
+
 
 # Cumplimiento por zona
 ```{r echo=FALSE, fig.pos="H", cache=FALSE}
