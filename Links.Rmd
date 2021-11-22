@@ -3,6 +3,5 @@ title: "Reporte semanal"
 output: html_document
 ---
 
-### Análisis Gráfico
 
-Tablas y estadísticas pendientes de realizar.
+
