@@ -33,14 +33,14 @@ data5<-ts(data5,start = c(2020,1),end = c(2021,12),frequency = 12)
 # ANALISIS PRELIMINAR
 #----------------------------------------------------------------------------------#
 # ANALIZANDO TENDENCIA COMO TOTAL DE VENTA LANSIER MES A MES POR AÑO
-autoplot(data5)
-ggseasonplot(data5)
+autoplot(data5)+labs(x="",y="Ventas en miles",title = "Ventas totales Lansier")
+ggseasonplot(data5)+labs(x="",y="Ventas en miles",title = "Ventas por año")
 ggsubseriesplot(data5)
 # del grafico me generan grandes dudas, que produtos hicieron que suba tanto entre mayo a agosto
 # del 2020 y de nuevo en diciembre de 2020, y por que ha bajado tanto en diciembre de 2021
 data$artdesValid<-trimws(data$artdesValid,"b")
 mayo<-data %>% filter(periodo=="2020-05-01") %>% group_by(artdesValid) %>% arrange(-subtotal)
-
+# ggsave("a.png",dpi = 300)
 distintosmayo2020<-distinct(data %>% filter(periodo=="2020-05-01") %>% select(artdesValid))
 
 #-------------------------------------------------------------------------------
@@ -74,8 +74,42 @@ categorbyyearnocovid %>% mutate(subtotal=subtotal/1000) %>%
 #-----------------------------------------------------------------------------------------#
 #             DESAGREGANDO POR CATEGORÍA, ANALISIS CATEGORIA POR CATEGORIA                #
 #-----------------------------------------------------------------------------------------#
+datanocovid$artdesValid<-toupper(datanocovid$artdesValid)
+datanocovid$periodo<-as.Date.character(datanocovid$periodo,format = "%Y-%m-%d")
+
 desagregando<-datanocovid %>%
   group_by(artdesValid) %>%
   summarise(subtotal=sum(subtotal)) %>%
   arrange(-subtotal)
 
+
+# graficos total desdel el 2020 de producto por encima de la media de ventas y por debajo ordenados de mayor a menor
+mediabyartdes<-mean(desagregando$subtotal)
+desagregando %>% filter(subtotal>mediabyartdes) %>%
+  ggplot(aes(x = reorder(artdesValid,subtotal), y = subtotal/1000000)) +
+  geom_bar(stat="identity", color='skyblue',fill='steelblue')+coord_flip()
+
+desagregando %>% filter(subtotal<mediabyartdes & subtotal>0) %>%
+  ggplot(aes(x = reorder(artdesValid,subtotal), y = subtotal/1000)) +
+  geom_bar(stat="identity", color='skyblue',fill='steelblue')+coord_flip()
+
+#-----------------------------------------------------------------------------------------#
+#                                 DESAGREGANDO POR PRODUCTO                               #
+#-----------------------------------------------------------------------------------------#
+# productos que en el 2021 estan por encima de la media total en subtotal
+top12artdes<-datanocovid %>% filter(periodo>"2020-12-01") %>% group_by(artdesValid) %>%
+  summarise(subtotal=sum(subtotal)) %>% filter(subtotal>mediabyartdes) %>% arrange(-subtotal) %>% select(artdesValid)
+top5artdes<-top12artdes[1:5,1]
+dataframidex<-datanocovid %>% filter(artdesValid=="FRAMIDEX NF SOL OFT EST X 2,5ML" & periodo>"2021-01-01")
+dataframidex %>% group_by(periodo) %>% summarise(subtotal=sum(subtotal)) %>%
+  arrange(periodo) %>% ggplot(aes(x=periodo,y=subtotal/1000))+geom_line()
+
+periodandartdesvalid<-datanocovid %>%
+  group_by(artdesValid,periodo) %>% summarise(subtotal=sum(subtotal))
+
+periodandartdesvalid %>% filter(periodo>"2020-12-01" , artdesValid %in% top5artdes$artdesValid ) %>%
+  ggplot(aes(x=periodo,y=subtotal/1000, group=artdesValid))+
+  geom_line(aes(color=artdesValid))+geom_point()+ theme(legend.position="bottom")
+
+ggsave("top5.png",dpi = 300)
+                                                                                   
