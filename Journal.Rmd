@@ -13,7 +13,7 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(message=FALSE,warning=FALSE, cache=FALSE)
 library(lubridate)
-setwd("C:/Users/LBarrios/Desktop/testgithub/Lansier")
+setwd("C:/Users/LBarrios/Desktop/Lansier")
 ```
 Informes generados por el área de análisis comercial.
 
@@ -32,7 +32,7 @@ library(colorspace)
 library(RODBC)
 sqlcomercial<-odbcConnect("SQLuis",uid = "sa",pwd = "Comercial.2020")
 fecharcarga<-sqlQuery(sqlcomercial,"select * from Fechas_Carga")
-data<-read_xlsx("C:\\Users\\LBarrios\\Desktop\\SQLDATAEXTRACTOR\\mailrdata\\datapresentacion.xlsx") #borre todo el path que decia C/USERS,etc y lo deje solo en el nombre de el archivo, asi ya no importa donde lo corra siempre y cuando este en el wd
+data<-read_xlsx("C:\\Users\\LBarrios\\Desktop\\mailRdata_vendedores\\datapresentacion.xlsx") #borre todo el path que decia C/USERS,etc y lo deje solo en el nombre de el archivo, asi ya no importa donde lo corra siempre y cuando este en el wd
 #con los siguientes comandos se le da cierto formato a la tabla para que sea mas facil de presentar la data en una tabla
 # AL PARECER PARA QUE ACTUALICE LA DATA TENGO QUE CAMBIAR ALGO DEL CODIGO SINO NO CORRE
 tabla<-data %>% select(-3) %>% select(-1)
@@ -90,7 +90,7 @@ tabla %>%
 
 
 ```{r dataventas setup, include=FALSE, cache=FALSE}
-dataventas<-read_xlsx("C:\\Users\\LBarrios\\Desktop\\SQLDATAEXTRACTOR\\mailrdata\\datapresentacionventas.xlsx") #borre todo el path que decia C/USERS,etc y lo deje solo en el nombre de el archivo, asi ya no importa donde lo corra siempre y cuando este en el wd
+dataventas<-read_xlsx("C:\\Users\\LBarrios\\Desktop\\mailRdata_vendedores\\datapresentacionventas.xlsx") #borre todo el path que decia C/USERS,etc y lo deje solo en el nombre de el archivo, asi ya no importa donde lo corra siempre y cuando este en el wd
 #con los siguientes comandos se le da cierto formato a la tabla para que sea mas facil de presentar la data en una tabla
 # AL PARECER PARA QUE ACTUALICE LA DATA TENGO QUE CAMBIAR ALGO DEL CODIGO SINO NO CORRE
 tablaventas<-dataventas %>% select(-3) %>% select(-1)
